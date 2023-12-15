@@ -36,6 +36,12 @@ class MallaRegular {
                 }
                 return false;
             }
+            typename list<T>::iterator  inicio(){
+                return puntos.begin();
+            }
+            typename list<T>::iterator  fin(){
+                return puntos.end();
+            }
 
     };
     float xMin, yMin, xMax, yMax; // Tamaño real global
@@ -81,10 +87,41 @@ unsigned MallaRegular<T>::maxElementosPorCelda() {
     }
     return maximo;
 }
-
+/**
+ * @brief Metodo Buscar Radio
+ * @post Obtenemos la  alturaMax y alturaMin
+ * @post Obtenemos el anchoMax y anchoMin
+ * @post Finalidad: Encontrar todos lo aeropuertos en un radio concentrado
+ * @tparam T
+ * @param xcentro
+ * @param ycentro
+ * @param radio
+ * @return
+ */
 template<typename T>
 vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
-    ;
+    float alturaMax= ycentro + radio;
+    float alturaMin = ycentro -radio;
+    float anchoMax = xcentro + radio;
+    float  anchoMin = xcentro -radio;
+    //En ambos sumamos por cada posicion el tamaño de cada casilla
+    for (float i = alturaMin; i < alturaMax; i=i+tamaCasillaY) {
+        for (int j = anchoMin; j < anchoMax; j=j+tamaCasillaX) {
+            //Si esta dentro del rango
+            if( i>=alturaMin && i<=alturaMax && j>=anchoMax && j<=anchoMin){
+                //Obtenemos la casilla
+                Casilla *casil = obtenerCasilla(i,j);
+                 typename list<T>::iterator iteraCasilla = casil->inicio();
+                for (iteraCasilla; iteraCasilla != casil->fin() ; ++iteraCasilla) {
+                    //Metemos los aeropuertos por casilla
+                //Sin acabar lo mismo se puede hacer haversine
+                }
+
+
+            }
+        }
+    }
+    
 }
 
 template<typename T>
