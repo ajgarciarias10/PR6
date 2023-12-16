@@ -1,17 +1,20 @@
 #include "Aeropuerto.h"
 #include "Ruta.h"
+#include "UTM.h"
 #include <vector>
 #include <list>
 #include <deque>
 #include <map>
 #include <set>
-#include "ThashAerop.h"
+#include "MallaRegular.h"
 #include "time.h"
 #include <iostream>
 #include <fstream>
 #include <string>
 #include <sstream>
+#include <queue>
 #include <unordered_map>
+
 #ifndef PRACTICA_2_VUELAFLIGHT_H
 #define PRACTICA_2_VUELAFLIGHT_H
 /**
@@ -36,6 +39,7 @@ private:
     //Metodo para rellenar la malla
     void rellenaMalla();
     //Declaramos los metodo publicos y constructores
+    MallaRegular<Aeropuerto*>airportsUTM;
     unordered_map <string,Aeropuerto> airportsID;
     multimap<string,Ruta> routesOrig;
     multimap<string,Ruta*> routesDest;
@@ -57,7 +61,7 @@ public:
     //Buscar AeropuertoPais
     vector<Aeropuerto*> buscarAeropuertoPais(string pais);
     //AñadirNuevoAeropuerto
-    void addAeropuerto(const Aeropuerto aeropuerto);
+    void addAeropuerto(const  Aeropuerto &aeropuerto);
     //AñadirNuevaRuta
     void addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolinea* aerolineaEncontrada);
     //Añade Aerolinea
@@ -100,7 +104,16 @@ public:
     void eliminarAeropuerto(string IATA);
     //Buscamos los Aeropuertos
     Aeropuerto* buscaAeropuerto(string IATAAirport);
+    //Metodo que eliminar cada aeropuerto Inactivo
     void eliminarAeropuertoInactivo();
+    //Buscar Aeropuertos en un radio concentrado
+    vector<Aeropuerto*> buscarAeropuertosRadio(UTM &pos, float radioKm);
+    //Metodo que devuelve los 5 aeropuertos en el area indicada con rutas de salida que tiene mas vuelos registrados
+    vector<Aeropuerto*> aeropuertosMasSalidas(UTM pos, float  radioKm);
+    //GetAerios
+    vector<Aeropuerto*> getAeros();
+
+
 
 };
 

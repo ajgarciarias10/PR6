@@ -10,24 +10,24 @@
 
 class UTM {
 private:
-    float latitud=0;
+    float latitud;
 
-    float longitud=0;
+    float longitud;
 public:
-    virtual ~UTM();
 
-    UTM()=default;
 
-    UTM(const float  &latitud,const float &longitud);
+    UTM();
 
-    float getLatitud() const;
+    UTM( float  latitud, float longitud);
+
+    float getLatitud() ;
 
     void setLatitud(float latitud);
 
-    float getLongitud() const;
+    float getLongitud() ;
 
     void setLongitud(float longitud);
-
+    virtual ~UTM();
 };
 
 

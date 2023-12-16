@@ -6,7 +6,7 @@
 #include <list>
 #include <deque>
 #include <map>
-#include "../PR5/Vuelo.h"
+#include "Vuelo.h"
 #include "fecha.h"
 /**
  * @file Aerolinea.h

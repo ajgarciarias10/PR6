@@ -2,7 +2,7 @@
 /**
  * @brief VuelaFlight
  */
-VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines() {
+VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), airportsUTM(){
 
     cargaAeropuertos("aeropuertos_v3.csv");
     cargaAerolineas("aerolineas_v1.csv");
@@ -106,8 +106,8 @@ VuelaFlight::VuelaFlight(const VuelaFlight &vl) : airportsID(vl.airportsID), rou
  * @param aeropuerto
  */
 
-void VuelaFlight::addAeropuerto(const Aeropuerto aeropuerto) {
-    pair<string,Aeropuerto> parAero = pair(aeropuerto.getIata(),aeropuerto);
+void VuelaFlight::addAeropuerto(const  Aeropuerto &aeropuerto2) {
+    pair<string,Aeropuerto> parAero = pair(aeropuerto2.getIata(),aeropuerto2);
     airportsID.insert(parAero);
 }
 /**
@@ -317,7 +317,10 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 fila = "";
                 columnas.clear();
                 //Insertamos en la tabla hash
-                addAeropuerto(Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, UTM(stof(latitud_str),stof(longitud_str))));
+                float latitud = stof(latitud_str);
+                float longuitud = stof(longitud_str);
+                Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais,  UTM(latitud,longuitud));
+                addAeropuerto(aero);
             }
         }
         //Tras leer ordenamos el vector por Codigo Iata
@@ -583,10 +586,55 @@ void VuelaFlight::eliminarAeropuertoInactivo() {
     }
 }
 
-
-
-
-
+/**
+ * @brief Metodo que inserta los aeropuertos leidos ->  en la malla
+ */
 void VuelaFlight::rellenaMalla() {
+    unordered_map<string ,Aeropuerto>::iterator  iteraLeidos = airportsID.begin();
+    for (iteraLeidos;iteraLeidos!=airportsID.end(); ++iteraLeidos) {
+        airportsUTM.insertarCasilla(iteraLeidos->second.getUtm().getLatitud(),iteraLeidos->second.getUtm().getLongitud(),&iteraLeidos->second);
+    }
+}
 
+vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm) {
+   vector<Aeropuerto*> radAeros ;
+    for(Aeropuerto **aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
+        radAeros.push_back(*aero);
+    }
+    return  radAeros;
+}
+
+vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM pos, float radioKm) {
+    vector <Aeropuerto*> aeroSal;
+    priority_queue<pair<long,Aeropuerto*>> cola;
+    for(Aeropuerto **aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
+        aeroSal.push_back(*aero);
+    }
+    for (int i = 0; i < aeroSal.size(); ++i) {
+        list<Ruta*> rutasOrig = buscarRutasOrigen(aeroSal[i]->getIata());
+        list<Ruta*>::iterator  iteRutas;
+        long numVuelos;
+        for (iteRutas = rutasOrig.begin();iteRutas != rutasOrig.end() ; ++iteRutas) {
+         numVuelos +=  (*iteRutas)->getNumVuelos();
+        }
+        pair<long,Aeropuerto*> par(numVuelos,aeroSal[i]);
+        cola.push(par);
+    }
+    for (int i = 0; i < 5; ++i) {
+        while(!cola.empty()){
+            cout<<"Posicion :" << i << "Aeropuerto:" << cola.top().second->getNombre()<< "Numero de Vuelos:" << cola.top().first<< endl;
+            aeroSal.push_back(cola.top().second);
+        }
+
+    }
+    return  aeroSal;
+}
+
+vector<Aeropuerto *> VuelaFlight::getAeros() {
+    vector<Aeropuerto*> pAdev ;
+    unordered_map <string,Aeropuerto>::iterator itpAdv ;
+    for (itpAdv= airportsID.begin(); itpAdv!=airportsID.end();itpAdv++) {
+        pAdev.push_back(&(itpAdv->second));
+    }
+    return pAdev;
 }

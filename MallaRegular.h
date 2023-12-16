@@ -58,7 +58,7 @@ public:
     void insertarCasilla(float x, float y, const T &dato);
     T *buscarCasilla(float x, float y, const T &dato);
     bool borrarCasilla(float x, float y, const T &dato);
-    vector<T> buscarRadio(float xcentro, float ycentro, float radio);
+    vector<T*> buscarRadio(float xcentro, float ycentro, float radio);
     unsigned maxElementosPorCelda();
     float promedioElementosPorCelda();
 
@@ -101,13 +101,14 @@ unsigned MallaRegular<T>::maxElementosPorCelda() {
  * @return
  */
 template<typename T>
-vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
+vector<T*> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
 
-    float alturaMax= ycentro + radio;
-    float alturaMin = ycentro -radio;
-    float anchoMax = xcentro + radio;
-    float  anchoMin = xcentro -radio;
-    vector<T> radAero;
+    float radioAkm = radio/111.1;
+    float alturaMax= ycentro + radioAkm;
+    float alturaMin = ycentro -radioAkm;
+    float anchoMax = xcentro + radioAkm;
+    float  anchoMin = xcentro -radioAkm;
+    vector<T*> radAero;
     //En ambos sumamos por cada posicion el tamaño de cada casilla
     for (float i = alturaMin; i < alturaMax; i=i+tamaCasillaY) {
         for (int j = anchoMin; j < anchoMax; j=j+tamaCasillaX) {
@@ -117,12 +118,18 @@ vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio
                 Casilla *casil = obtenerCasilla(i,j);
                  typename list<T>::iterator iteraCasilla = casil->inicio();
                 for (iteraCasilla; iteraCasilla != casil->fin() ; ++iteraCasilla) {
-                    //Metemos los aeropuertos por casilla
-                    radAero.insert(*iteraCasilla);
+                    //Tenemos que ver que si cada punto su distancia es la que le corresponde con el radio
+                    //Ya que si lo supera pues entonces estariamos calculado mal el radio
+                    float distancia = haversine(xcentro,ycentro,i,j);
+                    if(distancia <= radio){
+                        radAero.push_back(&(*iteraCasilla));
+                    }
+
                 }
             }
         }
     }
+    return  radAero;
     
 }
 

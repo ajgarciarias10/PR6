@@ -4,7 +4,7 @@
 #include "Aeropuerto.h"
 #include "Aerolinea.h"
 #include <list>
-#include "../PR5/Vuelo.h"
+#include "Vuelo.h"
 #include <iostream>
 using namespace std;
 /**

@@ -3,7 +3,7 @@
 #define PRACTICA_1B_AEROPUERTO_H
 
 #include <string>
-#include "../PR5/UTM.h"
+#include "UTM.h"
 #include "stdexcept"
 #include "algorithm"
 using namespace  std;
@@ -59,7 +59,7 @@ public:
     void setIsoPais(const std::string &isoPais);
 
     Aeropuerto(std::string id, std::string iata, std::string tipo,
-               std::string nombre,  std::string continente,  std::string isoPais,const UTM &pos);
+               std::string nombre,  std::string continente,  std::string isoPais, UTM pos);
 
     Aeropuerto(const Aeropuerto& orig);
 
