@@ -21,8 +21,7 @@ VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), 
  * @param vector
  * @param ruta
  */
-VuelaFlight::VuelaFlight(unordered_map<string,Aeropuerto> aeropuerto, multimap<string,Ruta> rutasorig, multimap<string,Ruta*> rutasdes ,map<string,Aerolinea> airlines):
-        airportsID(aeropuerto),airlines(airlines),routesDest(rutasdes),routesOrig(rutasorig) {}
+
 /**
  * @brief Destructor
  */
@@ -100,14 +99,16 @@ void VuelaFlight::addNuevaRuta(Aeropuerto* AerOrig, Aeropuerto* AerDest, Aerolin
  * @param vl
  */
 
-VuelaFlight::VuelaFlight(const VuelaFlight &vl) : airportsID(vl.airportsID), routesDest(vl.routesDest),routesOrig(vl.routesOrig),airlines(vl.airlines){}
+VuelaFlight::VuelaFlight(const VuelaFlight &vl) : airportsID(vl.airportsID), routesDest(vl.routesDest),routesOrig(vl.routesOrig),airlines(vl.airlines),
+                                                  airportsUTM(vl.airportsUTM){}
 /**
  * @brief Añade aeropuerto
  * @param aeropuerto
  */
 
 void VuelaFlight::addAeropuerto(const  Aeropuerto &aeropuerto2) {
-    airportsID.insert( pair<string,Aeropuerto>(aeropuerto2.getIata(),aeropuerto2));
+    pair<string,Aeropuerto> parAero = pair(aeropuerto2.getIata(),aeropuerto2);
+    airportsID.insert(parAero);
 }
 /**
  * @brief Metodo AddAerolinea
@@ -318,7 +319,6 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 //Insertamos en la tabla hash
                 float latitud = stof(latitud_str);
                 float longitud = stof(longitud_str);
-
                 Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, longitud, latitud);
                 addAeropuerto(aero);
             }

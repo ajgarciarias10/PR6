@@ -49,8 +49,6 @@ public:
     VuelaFlight();
     //Constructor copia
     VuelaFlight(const VuelaFlight &vl);
-    //Constructor parametrizado
-    VuelaFlight(unordered_map<string,Aeropuerto> aeropuerto, multimap<string,Ruta> rutasorig, multimap<string,Ruta*> rutasdes ,map<string,Aerolinea> airlines);
     //Destructor VuelaFlight
     ~VuelaFlight();
     //Metodos que tenemos que utilizar en esta practica
