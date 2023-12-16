@@ -3,8 +3,10 @@
 //
 #include <list>
 #include <vector>
+#include "Aeropuerto.h"
 #include <cmath>
 using  namespace std;
+
 #ifndef PR6_MALLAREGULAR_H
 #define PR6_MALLAREGULAR_H
 
@@ -100,10 +102,12 @@ unsigned MallaRegular<T>::maxElementosPorCelda() {
  */
 template<typename T>
 vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
+
     float alturaMax= ycentro + radio;
     float alturaMin = ycentro -radio;
     float anchoMax = xcentro + radio;
     float  anchoMin = xcentro -radio;
+    vector<T> radAero;
     //En ambos sumamos por cada posicion el tamaño de cada casilla
     for (float i = alturaMin; i < alturaMax; i=i+tamaCasillaY) {
         for (int j = anchoMin; j < anchoMax; j=j+tamaCasillaX) {
@@ -114,10 +118,8 @@ vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio
                  typename list<T>::iterator iteraCasilla = casil->inicio();
                 for (iteraCasilla; iteraCasilla != casil->fin() ; ++iteraCasilla) {
                     //Metemos los aeropuertos por casilla
-                //Sin acabar lo mismo se puede hacer haversine
+                    radAero.insert(*iteraCasilla);
                 }
-
-
             }
         }
     }
