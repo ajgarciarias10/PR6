@@ -1,10 +1,10 @@
 #include <iostream>
 #include "VuelaFlight.h"
-
 int main() {
     try {
         VuelaFlight vuelaFlight;
 
+#pragma  region Parte Practica 5
 #pragma  region Prueba de Rendimiento 1
         //Vector de Aeropuertos
         vector<Aeropuerto*> aeros =  vuelaFlight.getAeros();
@@ -30,7 +30,7 @@ int main() {
 #pragma endregion
 #pragma region Programa de prueba 2
         vuelaFlight.mostrarEstadoTabla();
-        Aeropuerto* aeropuerto = vuelaFlight.buscaAeropuerto("00AS");
+        Aeropuerto *aeropuerto = vuelaFlight.buscaAeropuerto("00AS");
         if(aeropuerto){
             cout<< "Nombre: " << aeropuerto->getNombre() <<  " IATA: " << aeropuerto->getIata()<<
                 " Pais: "<<  aeropuerto->getIsoPais()  <<endl;
@@ -39,6 +39,7 @@ int main() {
             if(!aeropuerto2){
                 cout<< " Ha sido borrado con exito " <<endl;
                 cout << "Realizando reinserccion del aeropuerto"<<endl;
+
                 vuelaFlight.addAeropuerto(*aeropuerto);
                 vuelaFlight.mostrarEstadoTabla();
                 vuelaFlight.eliminarAeropuertoInactivo();
@@ -51,9 +52,19 @@ int main() {
 #pragma endregion
 #pragma  region Redispersion
         cout<<endl<<"---------------REDISPERSION---------------"<<endl;
-        // vuelaFlight.redispersar()
+         vuelaFlight.redispersar();
+         vuelaFlight.mostrarEstadoTabla();
+
+#pragma  endregion
 #pragma  endregion
 
+#pragma  region Practica6
+        UTM utm = UTM(-3.7902800,37.7692200);
+        vector<Aeropuerto*> vAeriosRad =  vuelaFlight.buscarAeropuertosRadio(utm,300);
+        for (int i = 0; i < vAeriosRad.size(); ++i) {
+            cout<<"IATA : " << vAeriosRad[i]->getIata()<< "Nombre: "<< vAeriosRad[i]->getNombre()<<endl;
+        }
+#pragma  endregion
     }catch (invalid_argument &e){
         e.what();
     }

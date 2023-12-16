@@ -51,14 +51,15 @@ class MallaRegular {
     std::vector<std::vector<Casilla> > mr; // Vector 2D de casillas
     int nDiv,tamlog;
     Casilla *obtenerCasilla(float x, float y);
-    float haversine(float lat1, float lon1, float lat2, float lon2);
+
 
 public:
+    float haversine(float lat1, float lon1, float lat2, float lon2);
     MallaRegular(float aXMin=0.0, float aYMin=0.0, float aXMax=0.0, float aYMax=0.0, int aNDiv=0);
     void insertarCasilla(float x, float y, const T &dato);
     T *buscarCasilla(float x, float y, const T &dato);
     bool borrarCasilla(float x, float y, const T &dato);
-    vector<T*> buscarRadio(float xcentro, float ycentro, float radio);
+    vector<T> buscarRadio(float xcentro, float ycentro, float radio);
     unsigned maxElementosPorCelda();
     float promedioElementosPorCelda();
 
@@ -91,8 +92,8 @@ unsigned MallaRegular<T>::maxElementosPorCelda() {
 }
 /**
  * @brief Metodo Buscar Radio
- * @post Obtenemos la  alturaMax y alturaMin
- * @post Obtenemos el anchoMax y anchoMin
+ * @post Obtenemos la  latiMax y  latiMin
+ * @post Obtenemos el longMin y longMax
  * @post Finalidad: Encontrar todos lo aeropuertos en un radio concentrado
  * @tparam T
  * @param xcentro
@@ -101,36 +102,27 @@ unsigned MallaRegular<T>::maxElementosPorCelda() {
  * @return
  */
 template<typename T>
-vector<T*> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
-
-    float radioAkm = radio/111.1;
-    float alturaMax= ycentro + radioAkm;
-    float alturaMin = ycentro -radioAkm;
-    float anchoMax = xcentro + radioAkm;
-    float  anchoMin = xcentro -radioAkm;
-    vector<T*> radAero;
-    //En ambos sumamos por cada posicion el tamaño de cada casilla
-    for (float i = alturaMin; i < alturaMax; i=i+tamaCasillaY) {
-        for (int j = anchoMin; j < anchoMax; j=j+tamaCasillaX) {
-            //Si esta dentro del rango
-            if( i>=alturaMin && i<=alturaMax && j>=anchoMax && j<=anchoMin){
-                //Obtenemos la casilla
+vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
+    vector<T> aeroRad;
+    typename  list<T>::iterator  itRad;
+    double radioAkm= (radio/111.1);
+    float longMin=xcentro- radioAkm;
+    float latiMin= ycentro -radioAkm;
+    float longMax = xcentro +radioAkm;
+    float latiMax = ycentro +radioAkm;
+    for (float i = longMin; i <=longMax ; i= i +tamaCasillaX) {
+        for (float j = latiMin; j <=latiMax ; j= j +tamaCasillaY) {
+            if(i >= yMin && i<=yMax  && j>=xMin  && j<=xMax){
                 Casilla *casil = obtenerCasilla(i,j);
-                 typename list<T>::iterator iteraCasilla = casil->inicio();
-                for (iteraCasilla; iteraCasilla != casil->fin() ; ++iteraCasilla) {
-                    //Tenemos que ver que si cada punto su distancia es la que le corresponde con el radio
-                    //Ya que si lo supera pues entonces estariamos calculado mal el radio
-                    float distancia = haversine(xcentro,ycentro,i,j);
-                    if(distancia <= radio){
-                        radAero.push_back(&(*iteraCasilla));
-                    }
-
+                for (itRad =casil->inicio(); itRad != casil->fin();itRad++) {
+                    aeroRad.push_back(*itRad);
                 }
             }
+
         }
+
     }
-    return  radAero;
-    
+    return aeroRad;
 }
 
 template<typename T>

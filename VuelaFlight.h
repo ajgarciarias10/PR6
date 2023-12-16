@@ -110,6 +110,8 @@ public:
     vector<Aeropuerto*> aeropuertosMasSalidas(UTM pos, float  radioKm);
     //GetAerios
     vector<Aeropuerto*> getAeros();
+    //Redispersar
+    void redispersar();
 
 
 

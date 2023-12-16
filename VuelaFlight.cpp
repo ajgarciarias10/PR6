@@ -3,7 +3,6 @@
  * @brief VuelaFlight
  */
 VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), airportsUTM(){
-
     cargaAeropuertos("aeropuertos_v3.csv");
     cargaAerolineas("aerolineas_v1.csv");
     cargarRutas("rutas_v1.csv");
@@ -15,6 +14,7 @@ VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), 
         <<"Tamaño Vuelos: "<< tamaVuelos() << endl <<endl;
 
     rellenaMalla();
+
 }
 /**
  * @brief Constructor parametrizado
@@ -283,6 +283,7 @@ void VuelaFlight::cargarVuelos(string fichVuelos) {
  * @brief Metodo que carga los Aeropuertos
  */
 void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
+    float latitudMin=0,latitudMax=0,longMin=0,longMax=-0;
     clock_t lecturaAero = clock();
 
     ifstream is;
@@ -319,6 +320,19 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 //Insertamos en la tabla hash
                 float latitud = stof(latitud_str);
                 float longitud = stof(longitud_str);
+                if (latitud>latitudMax){
+                    latitudMax=latitud;
+                }else
+                if (latitud<latitudMin){
+                    latitudMin=latitud;
+                }
+                if (longitud>longMax){
+                    longMax=longitud;
+                }else
+                if (longitud <longMin){
+                    longMin=longitud;
+                }
+
                 Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, longitud, latitud);
                 addAeropuerto(aero);
             }
@@ -328,6 +342,7 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
     }else{
         std::cout << "Error de apertura en archivo" << std::endl;
     }
+    airportsUTM= MallaRegular<Aeropuerto*>(floor(longMin),floor(latitudMin),ceil(longMax),ceil(latitudMax), 73);
     std::cout << "Tiempo lectura de aeropuertos: " << ((clock() - lecturaAero) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
 }
 /**
@@ -573,17 +588,19 @@ Aeropuerto *VuelaFlight::buscaAeropuerto(string IATAAirport) {
 
 void VuelaFlight::eliminarAeropuertoInactivo() {
     cout<<"Eliminando inactivos: "<<endl;
-    unordered_map<string,Aeropuerto>::iterator iterAeros ;
-    for (iterAeros = airportsID.begin(); iterAeros != airportsID.end(); ++iterAeros) {
+    vector<Aeropuerto*> vAeros =  getAeros() ;
+    for (int i = 0; i <vAeros.size(); ++i) {
         multimap<string,Ruta*>::iterator  itDest;
-        itDest = routesDest.find(iterAeros->first);
+        itDest = routesDest.find(vAeros[i]->getIata());
         multimap<string,Ruta>::iterator  itOrig;
-        itOrig = routesOrig.find(iterAeros->first);
+        itOrig = routesOrig.find(vAeros[i]->getIata());
 
         if( itOrig == routesOrig.end() || itDest == routesDest.end()){
-            airportsID.erase(iterAeros->first);
+            airportsID.erase(vAeros[i]->getIata());
         }
     }
+
+
 }
 
 /**
@@ -598,8 +615,8 @@ void VuelaFlight::rellenaMalla() {
 
 vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm) {
    vector<Aeropuerto*> radAeros ;
-    for(Aeropuerto **aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
-        radAeros.push_back(*aero);
+    for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
+        radAeros.push_back(aero);
     }
     return  radAeros;
 }
@@ -607,8 +624,8 @@ vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm
 vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM pos, float radioKm) {
     vector <Aeropuerto*> aeroSal;
     priority_queue<pair<long,Aeropuerto*>> cola;
-    for(Aeropuerto **aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
-        aeroSal.push_back(*aero);
+    for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
+        aeroSal.push_back(aero);
     }
     for (int i = 0; i < aeroSal.size(); ++i) {
         list<Ruta*> rutasOrig = buscarRutasOrigen(aeroSal[i]->getIata());
@@ -637,4 +654,10 @@ vector<Aeropuerto *> VuelaFlight::getAeros() {
         pAdev.push_back(&(itpAdv->second));
     }
     return pAdev;
+}
+
+void VuelaFlight::redispersar() {
+    //Le asignas el tamaño que quieras redispersar y listo
+    airportsID.rehash(3900);
+
 }
