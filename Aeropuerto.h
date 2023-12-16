@@ -59,7 +59,7 @@ public:
     void setIsoPais(const std::string &isoPais);
 
     Aeropuerto(std::string id, std::string iata, std::string tipo,
-               std::string nombre,  std::string continente,  std::string isoPais, UTM pos);
+               std::string nombre,  std::string continente,  std::string isoPais,  float longitud, float latitud);
 
     Aeropuerto(const Aeropuerto& orig);
 

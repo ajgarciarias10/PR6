@@ -107,8 +107,7 @@ VuelaFlight::VuelaFlight(const VuelaFlight &vl) : airportsID(vl.airportsID), rou
  */
 
 void VuelaFlight::addAeropuerto(const  Aeropuerto &aeropuerto2) {
-    pair<string,Aeropuerto> parAero = pair(aeropuerto2.getIata(),aeropuerto2);
-    airportsID.insert(parAero);
+    airportsID.insert( pair<string,Aeropuerto>(aeropuerto2.getIata(),aeropuerto2));
 }
 /**
  * @brief Metodo AddAerolinea
@@ -318,8 +317,9 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 columnas.clear();
                 //Insertamos en la tabla hash
                 float latitud = stof(latitud_str);
-                float longuitud = stof(longitud_str);
-                Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais,  UTM(latitud,longuitud));
+                float longitud = stof(longitud_str);
+
+                Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, longitud, latitud);
                 addAeropuerto(aero);
             }
         }

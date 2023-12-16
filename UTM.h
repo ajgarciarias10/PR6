@@ -1,5 +1,8 @@
 #ifndef PRACTICA_1B_UTM_H
 #define PRACTICA_1B_UTM_H
+
+#include <iostream>
+
 /**
  * @file UTM.h
  * @date 04/10/2023
@@ -15,19 +18,27 @@ private:
     float longitud;
 public:
 
+    UTM(float latitud, float longitud) : latitud(latitud), longitud(longitud) {
+    }
+    UTM():latitud(0.0),longitud(0.0){};
 
-    UTM();
+    virtual ~UTM() {}
 
-    UTM( float  latitud, float longitud);
+    float getLatitud() const {
+        return latitud;
+    }
 
-    float getLatitud() ;
+    void setLatitud(float latitud) {
+        UTM::latitud = latitud;
+    }
 
-    void setLatitud(float latitud);
+    float getLongitud() const {
+        return longitud;
+    }
 
-    float getLongitud() ;
-
-    void setLongitud(float longitud);
-    virtual ~UTM();
+    void setLongitud(float longitud) {
+        UTM::longitud = longitud;
+    }
 };
 
 

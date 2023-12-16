@@ -1,9 +1,10 @@
 #include "Aeropuerto.h"
 
 #include <utility>
+#include <iostream>
 
 Aeropuerto::Aeropuerto() :id(""), iata(""), tipo(""), nombre(""), continente(""),
-                          iso_pais(""),posicion(UTM()){
+                          iso_pais(""),posicion(UTM(0.0,0.0)){
 }
 
 
@@ -12,9 +13,8 @@ Aeropuerto::~Aeropuerto() {
 }
 
 Aeropuerto::Aeropuerto(std::string id, std::string iata, std::string tipo,
-                        std::string nombre,  std::string continente,  std::string isoPais, UTM pos) : id(std::move(id)), iata(iata), tipo(tipo), nombre(nombre), continente(continente),
-                                                                                                                              iso_pais(isoPais),posicion(pos) {
-
+                        std::string nombre,  std::string continente,  std::string isoPais, float longitud, float latitud) : id(id), iata(iata), tipo(tipo), nombre(nombre), continente(continente),iso_pais(isoPais),posicion(longitud,latitud)
+                        {
 }
 Aeropuerto &Aeropuerto::operator=(const Aeropuerto &orig){
     if(this!=&orig){
@@ -33,7 +33,7 @@ Aeropuerto &Aeropuerto::operator=(const Aeropuerto &orig){
 
 
 Aeropuerto::Aeropuerto(const Aeropuerto& orig) : id(orig.id), iata(orig.iata), tipo(orig.tipo), nombre(orig.nombre), continente(orig.continente),
-                                                 iso_pais(orig.iso_pais){
+                                                 iso_pais(orig.iso_pais),posicion(orig.posicion){
 }
 
 
