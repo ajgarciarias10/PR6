@@ -45,6 +45,7 @@ private:
     multimap<string,Ruta*> routesDest;
     map<string,Aerolinea> airlines;
 public:
+
     //Constructor por defecto
     VuelaFlight();
     //Constructor copia

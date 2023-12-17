@@ -59,7 +59,7 @@ int main() {
 #pragma  endregion
 
 #pragma  region Practica6
-        UTM utm = UTM(-3.7902800,37.7692200);
+        UTM utm = UTM(37.7692200,-3.7902800);
         vector<Aeropuerto*> vAeriosRad =  vuelaFlight.buscarAeropuertosRadio(utm,300);
         for (int i = 0; i < vAeriosRad.size(); ++i) {
             cout<<"IATA : " << vAeriosRad[i]->getIata()<< "Nombre: "<< vAeriosRad[i]->getNombre()<<endl;

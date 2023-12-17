@@ -29,7 +29,8 @@ private:
     UTM posicion;
 
 public:
-
+    float getLatitud();
+    float getLongitud();
     UTM getUtm() const;
 
     void setUtm(UTM &utm);

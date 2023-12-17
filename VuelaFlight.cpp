@@ -3,6 +3,7 @@
  * @brief VuelaFlight
  */
 VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), airportsUTM(){
+
     cargaAeropuertos("aeropuertos_v3.csv");
     cargaAerolineas("aerolineas_v1.csv");
     cargarRutas("rutas_v1.csv");
@@ -283,7 +284,7 @@ void VuelaFlight::cargarVuelos(string fichVuelos) {
  * @brief Metodo que carga los Aeropuertos
  */
 void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
-    float latitudMin=0,latitudMax=0,longMin=0,longMax=-0;
+    float latitudMin=200,latitudMax=-200,longMin=200,longMax=-200;
     clock_t lecturaAero = clock();
 
     ifstream is;
@@ -320,6 +321,7 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 //Insertamos en la tabla hash
                 float latitud = stof(latitud_str);
                 float longitud = stof(longitud_str);
+
                 if (latitud>latitudMax){
                     latitudMax=latitud;
                 }else
@@ -332,7 +334,6 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 if (longitud <longMin){
                     longMin=longitud;
                 }
-
                 Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, longitud, latitud);
                 addAeropuerto(aero);
             }
@@ -342,8 +343,9 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
     }else{
         std::cout << "Error de apertura en archivo" << std::endl;
     }
-    airportsUTM= MallaRegular<Aeropuerto*>(floor(longMin),floor(latitudMin),ceil(longMax),ceil(latitudMax), 73);
+
     std::cout << "Tiempo lectura de aeropuertos: " << ((clock() - lecturaAero) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    airportsUTM= MallaRegular<Aeropuerto*>(floor(longMin),floor(latitudMin),ceil(longMax),ceil(latitudMax), 73);
 }
 /**
  * @brief Metodo que cargaLasAerolineas
@@ -607,15 +609,15 @@ void VuelaFlight::eliminarAeropuertoInactivo() {
  * @brief Metodo que inserta los aeropuertos leidos ->  en la malla
  */
 void VuelaFlight::rellenaMalla() {
-    unordered_map<string ,Aeropuerto>::iterator  iteraLeidos = airportsID.begin();
-    for (iteraLeidos;iteraLeidos!=airportsID.end(); ++iteraLeidos) {
-        airportsUTM.insertarCasilla(iteraLeidos->second.getUtm().getLatitud(),iteraLeidos->second.getUtm().getLongitud(),&iteraLeidos->second);
+    for ( unordered_map<string ,Aeropuerto>::iterator  iteraLeidos = airportsID.begin();iteraLeidos!=airportsID.end(); ++iteraLeidos) {
+            airportsUTM.insertarCasilla(iteraLeidos->second.getUtm().getLongitud(),iteraLeidos->second.getUtm().getLatitud(),&(iteraLeidos->second));
+
     }
 }
 
 vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm) {
    vector<Aeropuerto*> radAeros ;
-    for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
+    for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLongitud(),pos.getLatitud(),radioKm)) {
         radAeros.push_back(aero);
     }
     return  radAeros;
@@ -624,7 +626,7 @@ vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm
 vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM pos, float radioKm) {
     vector <Aeropuerto*> aeroSal;
     priority_queue<pair<long,Aeropuerto*>> cola;
-    for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLatitud(),pos.getLongitud(),radioKm)) {
+    for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLongitud(),pos.getLatitud(),radioKm)) {
         aeroSal.push_back(aero);
     }
     for (int i = 0; i < aeroSal.size(); ++i) {

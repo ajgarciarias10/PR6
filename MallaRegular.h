@@ -17,11 +17,13 @@ class MallaRegular {
         std::list<T> puntos;
         public:
             Casilla(): puntos() {}
-            void insertar(const T &dato) { puntos.push_back(dato); }
+            void insertar(const T &dato) {
+                   puntos.push_back(dato);
+            }
             T *buscar(const T& dato) {
                 typename list<T>::iterator it;
-                it = puntos.begin();
-                for (;it != puntos.end(); ++it){
+
+                for (  it = puntos.begin();it != puntos.end(); ++it){
                     if (*it == dato)
                         return &(*it);
                 }
@@ -44,17 +46,19 @@ class MallaRegular {
             typename list<T>::iterator  fin(){
                 return puntos.end();
             }
-
+        int  tamano(){
+            return puntos.size();
+        }
     };
     float xMin, yMin, xMax, yMax; // Tamaño real global
     float tamaCasillaX, tamaCasillaY; // Tamaño real de cada casilla
-    std::vector<std::vector<Casilla> > mr; // Vector 2D de casillas
-    int nDiv,tamlog;
+    vector<vector<Casilla> > mr; // Vector 2D de casillas
+    unsigned nDiv,tamlog;
     Casilla *obtenerCasilla(float x, float y);
-
+    float haversine(float lat1, float lon1, float lat2, float lon2);
 
 public:
-    float haversine(float lat1, float lon1, float lat2, float lon2);
+
     MallaRegular(float aXMin=0.0, float aYMin=0.0, float aXMax=0.0, float aYMax=0.0, int aNDiv=0);
     void insertarCasilla(float x, float y, const T &dato);
     T *buscarCasilla(float x, float y, const T &dato);
@@ -104,23 +108,25 @@ unsigned MallaRegular<T>::maxElementosPorCelda() {
 template<typename T>
 vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio) {
     vector<T> aeroRad;
-    typename  list<T>::iterator  itRad;
+    typename list<T>::iterator itRad;
     double radioAkm= (radio/111.1);
     float longMin=xcentro- radioAkm;
     float latiMin= ycentro -radioAkm;
     float longMax = xcentro +radioAkm;
     float latiMax = ycentro +radioAkm;
-    for (float i = longMin; i <=longMax ; i= i +tamaCasillaX) {
-        for (float j = latiMin; j <=latiMax ; j= j +tamaCasillaY) {
-            if(i >= yMin && i<=yMax  && j>=xMin  && j<=xMax){
+    for (float i = longMin; i <=longMax ; i+=tamaCasillaX) {
+        for (float j = latiMin; j <=latiMax ; j+=tamaCasillaY) {
+            if(j >= yMin && j<=yMax  && i>=xMin  && i<=xMax){
                 Casilla *casil = obtenerCasilla(i,j);
                 for (itRad =casil->inicio(); itRad != casil->fin();itRad++) {
-                    aeroRad.push_back(*itRad);
+                    float dist;
+                    dist = haversine( ycentro,xcentro ,(*itRad)->getLatitud(),(*itRad)->getLongitud());
+                    if (dist <= radio) {
+                        aeroRad.push_back(*itRad);
+                    }
                 }
             }
-
         }
-
     }
     return aeroRad;
 }
@@ -129,12 +135,12 @@ template<typename T>
 typename  MallaRegular<T>::Casilla *MallaRegular<T>::obtenerCasilla(float x, float y) {
     int i = (x - xMin) / tamaCasillaX;
     int j = (y - yMin) / tamaCasillaY;
-    return &mr[i][j];
+    return &mr.at(i).at(j);
 }
 
 template<typename T>
 float MallaRegular<T>::haversine(float lat1, float lon1, float lat2, float lon2) {
-    float R = 6.378;
+    float R = 6378.0;
     float IncrLat = (lat2 - lat1)*(M_PI/180);
     float IncrLon = (lon2 - lon1)*(M_PI/180);
     float a = pow(sin(IncrLat/2),2) + (cos(lat1*(M_PI/180))*cos(lat2*(M_PI/180))* pow(sin(IncrLon/2),2));
@@ -152,25 +158,28 @@ bool MallaRegular<T>::borrarCasilla(float x, float y, const T &dato) {
 template<typename T>
 T *MallaRegular<T>::buscarCasilla(float x, float y, const T &dato) {
    Casilla *casil = obtenerCasilla(x,y);
-    return casil->buscar(dato);     
+    return casil->buscar(dato);
 }
 
 template<typename T>
-void MallaRegular<T>::insertarCasilla(float x, float y, const T &dato) {
+void MallaRegular<T>::insertarCasilla(float x, float y, const T& dato) {
     Casilla *c = obtenerCasilla(x,y);
     //Comprobamos si la casilla esta en la malla
     //Si no esta lo metemos
-    if(!c->buscar(dato)){
-        c->insertar(dato);
-    }
+   // if(!c->buscar(dato)){
+   c->insertar(dato);
+   
+    //}
     tamlog++;
 }
 
 template<typename T>
-MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int aNDiv):xMin(aXMin), yMin(aYMin), xMax(aXMax), yMax(aYMax){
+MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int aNDiv):
+xMin(aXMin), yMin(aYMin), xMax(aXMax), yMax(aYMax), nDiv(aNDiv),tamlog(0){
     tamaCasillaX = (xMax - xMin)/aNDiv;
     tamaCasillaY = (yMax - yMin)/aNDiv;
     mr.insert(mr.begin(), aNDiv, vector<Casilla>(aNDiv));
+    mr.resize(aNDiv,  vector<Casilla>(aNDiv));
 }
 
 

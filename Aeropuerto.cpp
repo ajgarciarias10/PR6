@@ -104,3 +104,10 @@ bool Aeropuerto::operator<(const Aeropuerto &orig) const {
 bool Aeropuerto::operator>(const Aeropuerto &orig) const  {
     return  (iata>orig.iata);
 }
+
+float Aeropuerto::getLongitud() {
+    return getUtm().getLongitud();
+}
+float Aeropuerto::getLatitud() {
+    return getUtm().getLatitud();
+}
