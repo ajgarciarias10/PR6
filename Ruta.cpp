@@ -1,12 +1,14 @@
 #include "Ruta.h"
 
+#include <utility>
+
 Ruta::~Ruta() {
 }
 
 Ruta::Ruta():company(nullptr),origin(nullptr),destination(nullptr),fligthRou() {}
 Ruta::Ruta(const Ruta &orig) :company(orig.company),origin(orig.origin),destination(orig.destination),fligthRou(orig.fligthRou) {}
-Ruta::Ruta(Aeropuerto *destination, Aeropuerto *origin, Aerolinea *company,  list<Vuelo *> fvuelo)
-        : destination(destination), origin(origin), company(company), fligthRou(fvuelo) {}
+Ruta::Ruta(Aeropuerto *destination, Aeropuerto *origin, Aerolinea *company, list<Vuelo*> fvuelo)
+        : destination(destination), origin(origin), company(company), fligthRou(std::move(fvuelo)) {}
 
 
 

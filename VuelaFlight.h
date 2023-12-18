@@ -108,11 +108,13 @@ public:
     //Buscar Aeropuertos en un radio concentrado
     vector<Aeropuerto*> buscarAeropuertosRadio(UTM &pos, float radioKm);
     //Metodo que devuelve los 5 aeropuertos en el area indicada con rutas de salida que tiene mas vuelos registrados
-    vector<Aeropuerto*> aeropuertosMasSalidas(UTM pos, float  radioKm);
+    vector<Aeropuerto*> aeropuertosMasSalidas(UTM &pos, float  radioKm);
     //GetAerios
     vector<Aeropuerto*> getAeros();
     //Redispersar
     void redispersar();
+    //RellenaMalla por parejas
+    void rellenaMallaPar(Aeropuerto &a);
 
 
 

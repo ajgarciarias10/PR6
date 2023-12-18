@@ -12,7 +12,7 @@ VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), 
     cout<< "Tamaño Aerolineas: " << tamaAirlines() <<endl
         << "Tamaño aeropuertos: " << tamaAeropuertos() << endl
         << "Tamaño rutas: " << tamaRutasOrig() << endl
-        <<"Tamaño Vuelos: "<< tamaVuelos() << endl <<endl;
+        <<"Tamaño Vuelos: "<< tamaVuelos()  <<endl;
 
     rellenaMalla();
 
@@ -624,30 +624,40 @@ vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm
     return  radAeros;
 }
 
-vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM pos, float radioKm) {
+vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM &pos, float radioKm) {
     vector <Aeropuerto*> aeroSal;
-    priority_queue<pair<long,Aeropuerto*>> cola;
+    vector <Aeropuerto*> aeroSalCinco;
     for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLongitud(),pos.getLatitud(),radioKm)) {
-        aeroSal.push_back(aero);
-    }
-    for (int i = 0; i < aeroSal.size(); ++i) {
-        list<Ruta*> rutasOrig = buscarRutasOrigen(aeroSal[i]->getIata());
-        list<Ruta*>::iterator  iteRutas;
-        long numVuelos;
-        for (iteRutas = rutasOrig.begin();iteRutas != rutasOrig.end() ; ++iteRutas) {
-         numVuelos +=  (*iteRutas)->getNumVuelos();
-        }
-        pair<long,Aeropuerto*> par(numVuelos,aeroSal[i]);
-        cola.push(par);
-    }
-    for (int i = 0; i < 5; ++i) {
-        while(!cola.empty()){
-            cout<<"Posicion :" << i << "Aeropuerto:" << cola.top().second->getNombre()<< "Numero de Vuelos:" << cola.top().first<< endl;
-            aeroSal.push_back(cola.top().second);
+        if(aero!= nullptr){
+            aeroSal.push_back(aero);
         }
 
     }
-    return  aeroSal;
+    priority_queue<pair<long,Aeropuerto*>> cola;
+    set<pair<long,Aeropuerto*>> numVuelosOrdenados;
+    set<pair<long,Aeropuerto*>>::iterator itNumVuelosOrdenados;
+    for (int i = 0; i < aeroSal.size(); ++i) {
+        list<Ruta*> rutasOrig = buscarRutasOrigen(aeroSal[i]->getIata());
+        list<Ruta*>::iterator  iteRutas = rutasOrig.begin();
+        long numVuelos=0;
+        for (iteRutas  ;iteRutas != rutasOrig.end() ; ++iteRutas) {
+            numVuelos +=  (*iteRutas)->getNumVuelos();
+        }
+            numVuelosOrdenados.insert(pair<long,Aeropuerto*>(numVuelos,aeroSal[i]));
+    }
+    int contador = 0;
+    for (itNumVuelosOrdenados = numVuelosOrdenados.end(); contador != 6 ; --itNumVuelosOrdenados){
+        if(contador != 0){
+            cola.push(*itNumVuelosOrdenados);
+        }
+        contador++;
+
+    }
+        while(!cola.empty()){
+                aeroSalCinco.push_back(cola.top().second);
+                 cola.pop();
+        }
+    return  aeroSalCinco;
 }
 
 vector<Aeropuerto *> VuelaFlight::getAeros() {
@@ -661,6 +671,12 @@ vector<Aeropuerto *> VuelaFlight::getAeros() {
 
 void VuelaFlight::redispersar() {
     //Le asignas el tamaño que quieras redispersar y listo
-    airportsID.rehash(3900);
+    airportsID.rehash(airportsID.size()*1.3);
+
+}
+
+void VuelaFlight::rellenaMallaPar(Aeropuerto &a) {
+        airportsID.insert(pair<string,Aeropuerto>(a.getIata(),a));
+        airportsUTM.insertarCasilla(a.getLongitud(),a.getLatitud(),&a);
 
 }
