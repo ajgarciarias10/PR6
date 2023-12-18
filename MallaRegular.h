@@ -10,6 +10,13 @@ using  namespace std;
 #ifndef PR6_MALLAREGULAR_H
 #define PR6_MALLAREGULAR_H
 
+/**
+ * @file MallaRegular.h
+ * @date 17/12/2023
+ * @author Antonio José Garcia Arias, ajga001@red.ujaen.es
+ * @author Abraham Garcia Hurtado, agh00040@red.ujaen.es
+ * @brief MALLAREGULAR
+ */
 
 template<typename T>
 class MallaRegular {
@@ -130,16 +137,30 @@ vector<T> MallaRegular<T>::buscarRadio(float xcentro, float ycentro, float radio
     }
     return aeroRad;
 }
-
+/**
+ * @brief Metodo para obtener la casilla
+ * @tparam T
+ * @param x
+ * @param y
+ * @return
+ */
 template<typename T>
 typename  MallaRegular<T>::Casilla *MallaRegular<T>::obtenerCasilla(float x, float y) {
     int i = (x - xMin) / tamaCasillaX;
     int j = (y - yMin) / tamaCasillaY;
-    return &mr.at(i).at(j);
+    return &mr[i][j];
 
 
 }
-
+/**
+ * @brief Metodo para medir la distancia entre varias coordenadas mediante el algoritmo de haversine
+ * @tparam T
+ * @param lat1
+ * @param lon1
+ * @param lat2
+ * @param lon2
+ * @return
+ */
 template<typename T>
 float MallaRegular<T>::haversine(float lat1, float lon1, float lat2, float lon2) {
     float R = 6378.0;
@@ -150,31 +171,56 @@ float MallaRegular<T>::haversine(float lat1, float lon1, float lat2, float lon2)
     float d = R * c;
     return d;
 }
-
+/**
+ * @brief Metodo para borrar la Casilla
+ * @tparam T
+ * @param x
+ * @param y
+ * @param dato
+ * @return
+ */
 template<typename T>
 bool MallaRegular<T>::borrarCasilla(float x, float y, const T &dato) {
     Casilla  *c = obtenerCasilla(x,y);
     return c->borrar(dato);
 }
-
+/**
+ * @brief Metodo para buscar una casilla determinada
+ * @tparam T
+ * @param x
+ * @param y
+ * @param dato
+ * @return
+ */
 template<typename T>
 T *MallaRegular<T>::buscarCasilla(float x, float y, const T &dato) {
    Casilla *casil = obtenerCasilla(x,y);
     return casil->buscar(dato);
 }
-
+/**
+ * @brief Metodo para insertar una casilla en la Malla
+ * @tparam T
+ * @param x
+ * @param y
+ * @param dato
+ */
 template<typename T>
 void MallaRegular<T>::insertarCasilla(float x, float y, const T& dato) {
     Casilla *c = obtenerCasilla(x,y);
     //Comprobamos si la casilla esta en la malla
     //Si no esta lo metemos
-   // if(!c->buscar(dato)){
-   c->insertar(dato);
-
-    //}
+   if(!c->buscar(dato)){
+        c->insertar(dato);
+    }
     tamlog++;
 }
-
+/**
+ * @brief Constructor parametrizado de la Malla donde creamos la Malla
+ * @tparam T
+ * @param x
+ * @param y
+ * @param dato
+ */
 template<typename T>
 MallaRegular<T>::MallaRegular(float aXMin, float aYMin, float aXMax, float aYMax, int aNDiv):
 xMin(aXMin), yMin(aYMin), xMax(aXMax), yMax(aYMax), nDiv(aNDiv),tamlog(0){

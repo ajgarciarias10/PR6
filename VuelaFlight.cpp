@@ -13,7 +13,7 @@ VuelaFlight::VuelaFlight() : airportsID(),routesOrig(),routesDest(),airlines(), 
         << "Tamaño aeropuertos: " << tamaAeropuertos() << endl
         << "Tamaño rutas: " << tamaRutasOrig() << endl
         <<"Tamaño Vuelos: "<< tamaVuelos()  <<endl;
-
+    //Cargamos en la malla Regular
     rellenaMalla();
 
 }
@@ -284,7 +284,8 @@ void VuelaFlight::cargarVuelos(string fichVuelos) {
  * @brief Metodo que carga los Aeropuertos
  */
 void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
-    float latitudMin=200,latitudMax=-200,longMin=200,longMax=-200;
+    //Definimos los limites de la malla con los que vamos a ir jugando hasta encontrar el sus limites verdaderos
+    float latitudMin=120,latitudMax=-120,longMin=120,longMax=-120;
     clock_t lecturaAero = clock();
 
     ifstream is;
@@ -334,8 +335,8 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
                 if (longitud <longMin){
                     longMin=longitud;
                 }
-                Aeropuerto aero = Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, longitud, latitud);
-                addAeropuerto(aero);
+
+                addAeropuerto( Aeropuerto(id,iata,tipo,nombre,continente,iso_pais, longitud, latitud));
             }
         }
         //Tras leer ordenamos el vector por Codigo Iata
@@ -345,6 +346,7 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
     }
 
     std::cout << "Tiempo lectura de aeropuertos: " << ((clock() - lecturaAero) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
+    //Creamos la malla Regular con un numero de divisiones de celdas que pasamos al constructor en nuestro caso 73
     airportsUTM= MallaRegular<Aeropuerto*>(floor(longMin),floor(latitudMin),ceil(longMax),ceil(latitudMax), 73);
 
 }
@@ -580,7 +582,9 @@ void VuelaFlight::eliminarAeropuerto(string IATA) {
 
 
 }
-
+/**
+ * @brief Metodo que busca los Aeropuertos
+ */
 Aeropuerto *VuelaFlight::buscaAeropuerto(string IATAAirport) {
     unordered_map<string, Aeropuerto>::iterator  iteraAeros = airportsID.find(IATAAirport);
     if(iteraAeros != airportsID.end()){
@@ -588,7 +592,9 @@ Aeropuerto *VuelaFlight::buscaAeropuerto(string IATAAirport) {
     }
     return nullptr;
 }
-
+/**
+ * @brief Metodo de la practica 5 que elimina los Aeropuertos inactivos
+ */
 void VuelaFlight::eliminarAeropuertoInactivo() {
     cout<<"Eliminando inactivos: "<<endl;
     vector<Aeropuerto*> vAeros =  getAeros() ;
@@ -615,7 +621,12 @@ void VuelaFlight::rellenaMalla() {
 
     }
 }
-
+/**
+ * @brief Metodo que buscar Aeropuertos en un Radio determinado
+ * @param pos
+ * @param radioKm
+ * @return
+ */
 vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm) {
    vector<Aeropuerto*> radAeros ;
     for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLongitud(),pos.getLatitud(),radioKm)) {
@@ -623,10 +634,16 @@ vector<Aeropuerto *> VuelaFlight::buscarAeropuertosRadio(UTM &pos, float radioKm
     }
     return  radAeros;
 }
-
+/**
+ * @brief Metodo que se obtiene los 5 Aeropuertos con mas Salidas de Vuelos
+ * @param pos
+ * @param radioKm
+ * @return
+ */
 vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM &pos, float radioKm) {
     vector <Aeropuerto*> aeroSal;
     vector <Aeropuerto*> aeroSalCinco;
+    //Obtenemos los Aeropuertos que estan en el radio que se nos dice
     for(Aeropuerto *aero : airportsUTM.buscarRadio(pos.getLongitud(),pos.getLatitud(),radioKm)) {
         if(aero!= nullptr){
             aeroSal.push_back(aero);
@@ -636,6 +653,7 @@ vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM &pos, float radioKm)
     priority_queue<pair<long,Aeropuerto*>> cola;
     set<pair<long,Aeropuerto*>> numVuelosOrdenados;
     set<pair<long,Aeropuerto*>>::iterator itNumVuelosOrdenados;
+    //Obtenemos sus salidas y lo almacenamos en un set para que este ordenado de menor  a mayor
     for (int i = 0; i < aeroSal.size(); ++i) {
         list<Ruta*> rutasOrig = buscarRutasOrigen(aeroSal[i]->getIata());
         list<Ruta*>::iterator  iteRutas = rutasOrig.begin();
@@ -645,6 +663,8 @@ vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM &pos, float radioKm)
         }
             numVuelosOrdenados.insert(pair<long,Aeropuerto*>(numVuelos,aeroSal[i]));
     }
+    //Sacamos los 5 ultimos del reves y asi obtenemos los de mayor a menor; dato pone 6 en el for ya que el primero no se cuenta que es de tipo end
+    //Tras  eso lo metemos en una cola
     int contador = 0;
     for (itNumVuelosOrdenados = numVuelosOrdenados.end(); contador != 6 ; --itNumVuelosOrdenados){
         if(contador != 0){
@@ -653,13 +673,17 @@ vector<Aeropuerto *> VuelaFlight::aeropuertosMasSalidas(UTM &pos, float radioKm)
         contador++;
 
     }
+    //Recorremos la cola  sacamos cada elementos y lo metemos en el vector que vamos a devolver
         while(!cola.empty()){
                 aeroSalCinco.push_back(cola.top().second);
                  cola.pop();
         }
     return  aeroSalCinco;
 }
-
+/**
+ * @brief Metodo para la obtencion de Aeropuertos
+ * @return
+ */
 vector<Aeropuerto *> VuelaFlight::getAeros() {
     vector<Aeropuerto*> pAdev ;
     unordered_map <string,Aeropuerto>::iterator itpAdv ;
@@ -668,13 +692,18 @@ vector<Aeropuerto *> VuelaFlight::getAeros() {
     }
     return pAdev;
 }
-
+/**
+ * @brief Redispersion con unorderedmap
+ */
 void VuelaFlight::redispersar() {
     //Le asignas el tamaño que quieras redispersar y listo
     airportsID.rehash(airportsID.size()*1.3);
 
 }
-
+/**
+ * @brief Metodo usado para Rellenar Mallas por Pareja
+ * @param a
+ */
 void VuelaFlight::rellenaMallaPar(Aeropuerto &a) {
         airportsID.insert(pair<string,Aeropuerto>(a.getIata(),a));
         airportsUTM.insertarCasilla(a.getLongitud(),a.getLatitud(),&a);

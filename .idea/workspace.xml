@@ -3,9 +3,9 @@
   <component name="AutoImportSettings">
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
-  <component name="CMakePresetLoader"><![CDATA[{
-  "useNewFormat": true
-}]]></component>
+  <component name="CMakePresetLoader">{
+  &quot;useNewFormat&quot;: true
+}</component>
   <component name="CMakeReloadState">
     <option name="reloaded" value="true" />
   </component>
@@ -20,7 +20,9 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="aaf3a0be-611a-44ff-8b61-d8eada1c407e" name="Changes" comment="">
+    <list default="true" id="6194da00-7c71-4254-ad5c-db6d4246a34d" name="Changes" comment="Te toca">
+      <change beforePath="$PROJECT_DIR$/MallaRegular.h" beforeDir="false" afterPath="$PROJECT_DIR$/MallaRegular.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/VuelaFlight.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/VuelaFlight.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/main.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,10 +37,16 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 6
-}]]></component>
-  <component name="ProjectId" id="2Zj7cA2WDsNmuo7IGn7WFl9Z4mk" />
+  <component name="ProjectApplicationVersion">
+    <option name="ide" value="CLion" />
+    <option name="majorVersion" value="2023" />
+    <option name="minorVersion" value="2.2" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 3
+}</component>
+  <component name="ProjectId" id="2Zj2c2yqSiYzTNxLLPUzmEDDM2D" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -51,6 +59,8 @@
     "WebServerToolWindowFactoryState": "false",
     "cf.first.check.clang-format": "false",
     "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/AntonioJR/Nextcloud/UNIVERSIDAD/Segundo/PRIMER CUATRI/EEDD/PRACTICAS/PR6/cmake-build-debug",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -58,13 +68,18 @@
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\AntonioJR\Nextcloud\UNIVERSIDAD\Segundo\PRIMER CUATRI\EEDD\PRACTICAS\PR6\cmake-build-debug" />
+    </key>
+  </component>
   <component name="RunManager">
-    <configuration default="true" type="CLionExternalRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
+    <configuration name="PR6" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PR6" TARGET_NAME="PR6" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="PR6" RUN_TARGET_NAME="PR6">
       <method v="2">
-        <option name="CLION.EXTERNAL.BUILD" enabled="true" />
+        <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PR6" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true" PROJECT_NAME="PR6" TARGET_NAME="PR6" CONFIG_NAME="Debug" RUN_TARGET_PROJECT_NAME="PR6" RUN_TARGET_NAME="PR6">
+    <configuration default="true" type="CMakeRunConfiguration" factoryName="Application" REDIRECT_INPUT="false" ELEVATE="false" USE_EXTERNAL_CONSOLE="false" EMULATE_TERMINAL="false" PASS_PARENT_ENVS_2="true">
       <method v="2">
         <option name="com.jetbrains.cidr.execution.CidrBuildBeforeRunTaskProvider$BuildBeforeRunTask" enabled="true" />
       </method>
@@ -73,13 +88,23 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="aaf3a0be-611a-44ff-8b61-d8eada1c407e" name="Changes" comment="" />
-      <created>1702923713629</created>
+      <changelist id="6194da00-7c71-4254-ad5c-db6d4246a34d" name="Changes" comment="" />
+      <created>1702921244488</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1702923713629</updated>
-      <workItem from="1702923715066" duration="866000" />
+      <updated>1702921244488</updated>
+      <workItem from="1702921246390" duration="2734000" />
+      <workItem from="1702937985259" duration="2896000" />
     </task>
+    <task id="LOCAL-00001" summary="Te toca">
+      <option name="closed" value="true" />
+      <created>1702923458542</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1702923458542</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -91,30 +116,29 @@
     <isAutomaticFoundErrors value="true" />
     <isAutomaticFoundErrors value="true" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Te toca" />
+    <option name="LAST_COMMIT_MESSAGE" value="Te toca" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>114</line>
-          <option name="timeStamp" value="2" />
+          <url>file://$PROJECT_DIR$/VuelaFlight.cpp</url>
+          <line>707</line>
+          <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>112</line>
-          <option name="timeStamp" value="3" />
+          <url>file://$PROJECT_DIR$/VuelaFlight.cpp</url>
+          <line>709</line>
+          <option name="timeStamp" value="11" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="com.jetbrains.cidr.execution.debugger.OCBreakpointType">
-          <url>file://$PROJECT_DIR$/main.cpp</url>
-          <line>117</line>
-          <option name="timeStamp" value="4" />
+          <url>file://$PROJECT_DIR$/VuelaFlight.cpp</url>
+          <line>708</line>
+          <option name="timeStamp" value="12" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
-    <watches-manager>
-      <configuration name="CMakeRunConfiguration">
-        <watch expression="aerosAntequera[100]" />
-      </configuration>
-    </watches-manager>
   </component>
 </project>
