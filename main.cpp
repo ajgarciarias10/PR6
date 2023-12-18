@@ -1,5 +1,12 @@
 #include <iostream>
 #include "VuelaFlight.h"
+/**
+ * @file MAIN.h
+ * @date 19/12/2023
+ * @author Antonio José Garcia Arias, ajga001@red.ujaen.es
+ * @author Abraham Garcia Hurtado, agh00040@red.ujaen.es
+ * @brief main
+ */
 float haversine(float lat1, float lon1, float lat2, float lon2) {
     float R = 6378.0;
     float IncrLat = (lat2 - lat1)*(M_PI/180);
