@@ -97,7 +97,7 @@ UTM utm = UTM(37.7692200,-3.7902800);
             cout<<"El aeropuerto de Venecia concentra mas aeropuertos en un radio de 400km con un total de: "<<aerosVenecia.size()<<endl;
         }
 
-        Aeropuerto aeroJaen("0000","JEN","small_airport","JAEN airport","EU","ES",37.7692200,-3.7902800);
+        Aeropuerto aeroJaen("875885","JEN","small_airport","JAEN airport","EU","ES",37.7692200,-3.7902800);
         vuelaFlight.addAeropuerto(aeroJaen);
         Aerolinea iberia=vuelaFlight.buscaAerolinea("IBE");
 
@@ -110,10 +110,13 @@ UTM utm = UTM(37.7692200,-3.7902800);
         vuelaFlight.addNuevaRuta(barcelona,jaen2,&iberia);
         vuelaFlight.addNuevaRuta(jaen2,barcelona,&iberia);
         
-        vuelaFlight.rellenaMallaPar(*jaen2);
+        vuelaFlight.rellenaMallaPar(aeroJaen);
+
         UTM antequera(37.0193800, -4.5612300);
         vector<Aeropuerto*> aerosAntequera=vuelaFlight.buscarAeropuertosRadio(antequera,300);
+        sort(aerosAntequera.begin(),aerosAntequera.end());
         for (int i = 0; i < aerosAntequera.size(); ++i) {
+            cout<<"Iata: "<<aerosAntequera[i]->getIata()<<endl;
             if(aerosAntequera[i]->getIata() == "JEN") {
                 cout<<"El aeropuerto de Jaen se encuentra dentro de un radio de 300km de Antequera"<<endl;
                 cout<< i << ": " <<" IATA : " << aerosAntequera[i]->getIata()<< " Nombre: "<< aerosAntequera[i]->getNombre()<<endl;
