@@ -13,7 +13,7 @@ Aeropuerto::~Aeropuerto() {
 }
 
 Aeropuerto::Aeropuerto(std::string id, std::string iata, std::string tipo,
-                        std::string nombre,  std::string continente,  std::string isoPais, float longitud, float latitud) : id(id), iata(iata), tipo(tipo), nombre(nombre), continente(continente),iso_pais(isoPais),posicion(longitud,latitud)
+                        std::string nombre,  std::string continente,  std::string isoPais, float longitud, float latitud) : id(id), iata(iata), tipo(tipo), nombre(nombre), continente(continente),iso_pais(isoPais),posicion(latitud,longitud)
                         {
 }
 Aeropuerto &Aeropuerto::operator=(const Aeropuerto &orig){

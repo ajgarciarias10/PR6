@@ -1,9 +1,18 @@
 #include <iostream>
 #include "VuelaFlight.h"
+float haversine(float lat1, float lon1, float lat2, float lon2) {
+    float R = 6378.0;
+    float IncrLat = (lat2 - lat1)*(M_PI/180);
+    float IncrLon = (lon2 - lon1)*(M_PI/180);
+    float a = pow(sin(IncrLat/2),2) + (cos(lat1*(M_PI/180))*cos(lat2*(M_PI/180))* pow(sin(IncrLon/2),2));
+    float c = 2 * atan2 (sqrt (a), sqrt (1-a));
+    float d = R * c;
+    return d;
+}
 int main() {
     try {
         VuelaFlight vuelaFlight;
-
+/*
 #pragma  region Parte Practica 5
 #pragma  region Prueba de Rendimiento 1
         //Vector de Aeropuertos
@@ -57,13 +66,54 @@ int main() {
 
 #pragma  endregion
 #pragma  endregion
-
-#pragma  region Practica6
+*/
+#pragma  region Practica 6
         UTM utm = UTM(37.7692200,-3.7902800);
         vector<Aeropuerto*> vAeriosRad =  vuelaFlight.buscarAeropuertosRadio(utm,300);
+        Aeropuerto* mascercano;
+        float aux=3000;
         for (int i = 0; i < vAeriosRad.size(); ++i) {
-            cout<<"IATA : " << vAeriosRad[i]->getIata()<< "Nombre: "<< vAeriosRad[i]->getNombre()<<endl;
+            float dis= haversine(37.7692200,-3.7902800,vAeriosRad[i]->getLatitud(),vAeriosRad[i]->getLongitud());
+            if (dis<aux){
+                aux=dis;
+                mascercano=vAeriosRad[i];
+            }
+            cout<< i << ": " <<" IATA : " << vAeriosRad[i]->getIata()<< " Nombre: "<< vAeriosRad[i]->getNombre()<<endl;
         }
+        cout<<"El aeropuerto mas cercano a Jaen Capital es: "<<mascercano->getNombre()<<endl;
+    /*
+        UTM madrid(40.471926,-3.56264);
+        vector<Aeropuerto*> aerosMadrid=vuelaFlight.aeropuertosMasSalidas(madrid,800);*/
+
+        UTM londres(51.505299,0.055278),venecia(45.505299,12.3519);
+        vector<Aeropuerto*> aerosLondres=vuelaFlight.buscarAeropuertosRadio(londres,400);
+        vector<Aeropuerto*> aerosVenecia=vuelaFlight.buscarAeropuertosRadio(venecia,400);
+        if (aerosLondres.size()>aerosVenecia.size()){
+            cout<<"El aeropuerto de Londres concentra mas aeropuertos en un radio de 400km con un total de: "<<aerosLondres.size()<<endl;
+        }else{
+            cout<<"El aeropuerto de Venecia concentra mas aeropuertos en un radio de 400km con un total de: "<<aerosVenecia.size()<<endl;
+        }
+        Aeropuerto aeroJaen("0000","JEN","small_airport","JAEN airport","EU","ES",37.7692200,-3.7902800);
+        vuelaFlight.addAeropuerto(aeroJaen);
+        Aerolinea iberia=vuelaFlight.buscaAerolinea("IBE");
+        Aeropuerto* jaen2=vuelaFlight.buscaAeropuerto("JEN");
+        Aeropuerto* madrid=vuelaFlight.buscaAeropuerto("MAD");
+        Aeropuerto* barcelona=vuelaFlight.buscaAeropuerto("BCN");
+
+        vuelaFlight.addNuevaRuta(madrid,jaen2,&iberia);
+        vuelaFlight.addNuevaRuta(jaen2,madrid,&iberia);
+        vuelaFlight.addNuevaRuta(barcelona,jaen2,&iberia);
+        vuelaFlight.addNuevaRuta(jaen2,barcelona,&iberia);
+        UTM antequera(37.0193800, -4.5612300);
+        vector<Aeropuerto*> aerosAntequera=vuelaFlight.buscarAeropue            cout<< i << ": " <<" IATA : " << vAeriosRad[i]->getIata()<< " Nombre: "<< vAeriosRad[i]->getNombre()<<endl;
+        rtosRadio(antequera,300);
+        for (int i = 0; i < aerosAntequera.size(); ++i) {
+            if ("JEN"==aerosAntequera[i]->getIata()){
+                cout<<"El aeropuerto de Jaen se encuentra dentro de un radio de 300km de Antequera"<<endl;
+                cout<< i << ": " <<" IATA : " << aerosAntequera[i]->getIata()<< " Nombre: "<< aerosAntequera[i]->getNombre()<<endl;
+            }
+        }
+
 #pragma  endregion
     }catch (invalid_argument &e){
         e.what();

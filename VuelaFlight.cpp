@@ -346,6 +346,7 @@ void VuelaFlight::cargaAeropuertos(string fichAeropuertos) {
 
     std::cout << "Tiempo lectura de aeropuertos: " << ((clock() - lecturaAero) / (float) CLOCKS_PER_SEC) << " segs." << std::endl;
     airportsUTM= MallaRegular<Aeropuerto*>(floor(longMin),floor(latitudMin),ceil(longMax),ceil(latitudMax), 73);
+
 }
 /**
  * @brief Metodo que cargaLasAerolineas
@@ -610,7 +611,7 @@ void VuelaFlight::eliminarAeropuertoInactivo() {
  */
 void VuelaFlight::rellenaMalla() {
     for ( unordered_map<string ,Aeropuerto>::iterator  iteraLeidos = airportsID.begin();iteraLeidos!=airportsID.end(); ++iteraLeidos) {
-            airportsUTM.insertarCasilla(iteraLeidos->second.getUtm().getLongitud(),iteraLeidos->second.getUtm().getLatitud(),&(iteraLeidos->second));
+            airportsUTM.insertarCasilla(iteraLeidos->second.getLongitud(),iteraLeidos->second.getLatitud(),&(iteraLeidos->second));
 
     }
 }

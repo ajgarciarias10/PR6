@@ -136,6 +136,8 @@ typename  MallaRegular<T>::Casilla *MallaRegular<T>::obtenerCasilla(float x, flo
     int i = (x - xMin) / tamaCasillaX;
     int j = (y - yMin) / tamaCasillaY;
     return &mr.at(i).at(j);
+
+
 }
 
 template<typename T>
@@ -168,7 +170,7 @@ void MallaRegular<T>::insertarCasilla(float x, float y, const T& dato) {
     //Si no esta lo metemos
    // if(!c->buscar(dato)){
    c->insertar(dato);
-   
+
     //}
     tamlog++;
 }
