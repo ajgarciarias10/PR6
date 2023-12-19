@@ -102,7 +102,7 @@ int main() {
         }
 
         cout<<"------------------Concentra mas aeropuertos LONDRES O VENECIA------------------"<< endl;
-        UTM londres(51.4706,-0.46194),venecia(-34.8117287,-56.1633936907258);
+        UTM londres(51.510636,-0.303172 ),venecia(12.221751,45.515483);
         vector<Aeropuerto*> aerosLondres=vuelaFlightPR6.buscarAeropuertosRadio(londres,400);
         vector<Aeropuerto*> aerosVenecia=vuelaFlightPR6.buscarAeropuertosRadio(venecia,400);
         if (aerosLondres.size()>aerosVenecia.size()){
